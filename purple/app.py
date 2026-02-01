@@ -5,15 +5,25 @@ from utils import add_custom_css, show_glass_card, show_glass_header_title
 st.set_page_config(page_title="Purple's Kitchen", page_icon="🍇", layout="wide")
 add_custom_css()
 
-# --- USE THE NEW GLASS HEADER ---
+# --- PATH SETUP (Crucial Fix) ---
+# This ensures it finds the image whether on Cloud or Local
+current_dir = Path(__file__).parent
+loading_img = current_dir / "assets" / "images" / "loading.gif"
+
+# --- MAIN UI ---
 show_glass_header_title("Purple's Kitchen 🍇")
 st.markdown("<h3 style='text-align: center; color: black;'>The Ultimate AI Culinary Assistant</h3>", unsafe_allow_html=True)
-st.write("") # Spacer
+st.write("") 
 
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    st.image("assets/images/loading.gif", width=300)
+    # Use the safe path variable we created above
+    if loading_img.exists():
+        st.image(str(loading_img), width=300)
+    else:
+        # Fallback if image is still missing (prevents crash)
+        st.warning("⚠️ Image not found: assets/images/loading.gif")
 
 with col2:
     # GLASS CARD 1
